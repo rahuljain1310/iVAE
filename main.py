@@ -35,8 +35,7 @@ if __name__ == '__main__':
     parser.add_argument('-l', '--lr', type=float, default=1e-3, help='learning rate (default 1e-3)')
     parser.add_argument('-s', '--seed', type=int, default=1, help='random seed (default 1)')
     parser.add_argument('-c', '--cuda', action='store_true', default=False, help='train on gpu')
-    parser.add_argument('-p', '--preload-gpu', action='store_true', default=False, dest='preload',
-                        help='preload data on gpu for faster training.')
+    parser.add_argument('-p', '--preload-gpu', action='store_true', default=False, dest='preload', help='preload data on gpu for faster training.')
     parser.add_argument('-a', '--anneal', action='store_true', default=False, help='use annealing in learning')
     parser.add_argument('-n', '--no-log', action='store_true', default=False, help='run without logging')
     parser.add_argument('-q', '--log-freq', type=int, default=25, help='logging frequency (default 25).')
@@ -48,8 +47,7 @@ if __name__ == '__main__':
 
     st = time.time()
 
-    if args.file is None:
-        args.file = create_if_not_exist_dataset(root='data/', arg_str=args.data_args)
+    if args.file is None: args.file = create_if_not_exist_dataset(root='data/', arg_str=args.data_args)
     metadata = vars(args).copy()
     del metadata['no_log'], metadata['data_args']
 
