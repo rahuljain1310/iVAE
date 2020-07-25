@@ -23,8 +23,7 @@ def to_one_hot(x, m=None):
         x = [x]
     if m is None:
         ml = []
-        for xi in x:
-            ml += [xi.max() + 1]
+        for xi in x: ml += [xi.max() + 1]
         m = max(ml)
     dtp = x[0].dtype
     xoh = []
@@ -32,7 +31,6 @@ def to_one_hot(x, m=None):
         xoh += [np.zeros((xi.size, int(m)), dtype=dtp)]
         xoh[i][np.arange(xi.size), xi.astype(np.int)] = 1
     return xoh
-
 
 def lrelu(x, neg_slope):
     """
@@ -47,15 +45,12 @@ def lrelu(x, neg_slope):
         """
         one dimensional implementation of leaky ReLU
         """
-        if _x > 0:
-            return _x
-        else:
-            return _x * _neg_slope
+        if _x > 0: return _x
+        else: return _x * _neg_slope
 
     leaky1d = np.vectorize(_lrelu_1d)
     assert neg_slope > 0  # must be positive
     return leaky1d(x, neg_slope)
-
 
 def sigmoid(x):
     """
@@ -65,7 +60,6 @@ def sigmoid(x):
         out: output array
     """
     return 1 / (1 + np.exp(-x))
-
 
 def generate_mixing_matrix(d_sources: int, d_data=None, lin_type='uniform', cond_threshold=25, n_iter_4_cond=None,
                            dtype=np.float32):
@@ -292,14 +286,15 @@ class SyntheticDataset(Dataset):
         return self.x[index], self.u[index], self.s[index]
 
     def get_metadata(self):
-        return {'path': self.path,
-                'nps': self.nps,
-                'ns': self.aux_dim,
-                'n': self.len,
-                'latent_dim': self.latent_dim,
-                'data_dim': self.data_dim,
-                'aux_dim': self.aux_dim,
-                }
+        return {
+            'path': self.path,
+            'nps': self.nps,
+            'ns': self.aux_dim,
+            'n': self.len,
+            'latent_dim': self.latent_dim,
+            'data_dim': self.data_dim,
+            'aux_dim': self.aux_dim,
+        }
 
 
 class DataLoaderGPU:

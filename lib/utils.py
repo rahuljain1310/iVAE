@@ -9,18 +9,13 @@ import torch
 
 
 def make_dir(dir_name):
-    if dir_name[-1] != '/':
-        dir_name += '/'
-    if not os.path.exists(dir_name):
-        os.makedirs(dir_name)
+    if dir_name[-1] != '/': dir_name += '/'
+    if not os.path.exists(dir_name): os.makedirs(dir_name)
     return dir_name
 
-
 def make_file(file_name):
-    if not os.path.exists(file_name):
-        open(file_name, 'a').close()
+    if not os.path.exists(file_name): open(file_name, 'a').close()
     return file_name
-
 
 def get_exp_id(log_folder):
     log_folder = make_dir(log_folder)
@@ -53,7 +48,6 @@ def get_exp_id(log_folder):
         fcntl.flock(file, fcntl.LOCK_UN)
     return curr_id
 
-
 def from_log(args, argv, logpath):
     """
     read from log, and allow change of arguments
@@ -83,7 +77,6 @@ def from_log(args, argv, logpath):
     new_d.update(d)
     return new_d, add_to_log
 
-
 def checkpoint(path, exp_id, iteration, model, optimizer, loss, perf):
     sub_path = make_dir(path + str(exp_id) + '/')
     weights_path = sub_path + str(exp_id) + '_ckpt_' + str(iteration) + '.pth'
@@ -94,7 +87,6 @@ def checkpoint(path, exp_id, iteration, model, optimizer, loss, perf):
                 'loss': loss,
                 'perf': perf},
                weights_path)
-
 
 class RunningAverageMeter(object):
     """Computes and stores the average and current value"""
@@ -115,7 +107,6 @@ class RunningAverageMeter(object):
             self.avg = self.avg * self.momentum + val * (1 - self.momentum)
         self.val = val
 
-
 class Averager:
     def __init__(self):
         self.val = 0
@@ -134,7 +125,6 @@ class Averager:
         self.sum += val
         self.count += 1
         self.avg = self.sum / self.count
-
 
 class Logger:
     """A logging helper that tracks training loss and metrics."""
