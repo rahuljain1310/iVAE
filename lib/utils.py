@@ -1,6 +1,5 @@
 import json
 import os
-import fcntl
 import errno
 import time
 
@@ -21,31 +20,24 @@ def get_exp_id(log_folder):
     log_folder = make_dir(log_folder)
     helper_id_file = log_folder + '.expid'
     if not os.path.exists(helper_id_file):
-        with open(helper_id_file, 'w') as f:
-            f.writelines('0')
+        with open(helper_id_file, 'w') as f: f.writelines('0')
     # helper_id_file = make_file(helper_id_file)
     with open(helper_id_file, 'r+') as file:
-        st = time.time()
-        while time.time() - st < 30:
-            try:
-                fcntl.flock(file, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                # a = input()
-                break
-            except IOError as e:
-                # raise on unrelated IOErrors
-                if e.errno != errno.EAGAIN:
-                    raise
-                else:
-                    print('sleeping')
-                    time.sleep(0.1)
-        else:
-            raise TimeoutError('Timeout on accessing log helper file {}'.format(helper_id_file))
+        # st = time.time()
+        # while time.time() - st < 30:
+        #     try:
+        #         fcntl.flock(file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        #         break
+        #     except IOError as e:
+        #         if e.errno != errno.EAGAIN: raise
+        #         else: time.sleep(0.1) 
+        # else:
+        #     raise TimeoutError('Timeout on accessing log helper file {}'.format(helper_id_file))
         prev_id = int(file.readline())
         curr_id = prev_id + 1
-
         file.seek(0)
         file.writelines(str(curr_id))
-        fcntl.flock(file, fcntl.LOCK_UN)
+        # fcntl.flock(file, fcntl.LOCK_UN)
     return curr_id
 
 def from_log(args, argv, logpath):
